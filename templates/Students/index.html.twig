@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+{% block head %}
+{% block title %} SymfOBS Students {% endblock %}
+{% block javascripts %}
+<script>
+    var $ = jQuery.noConflict();
+    $(document).ready(function(){
+    $(".btn.btn-danger.delete-student").click(function(){
+        var id = $(this).attr('data-id');
+        fetch(`/student/delete/${id}`,
+        {method: `DELETE`}).then(res => window.location.reload());
+    });
+
+
+    $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#mytable tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+  });
+
+ 
+
+</script>
+{% endblock %}
+{% endblock %}
+            
+{% block body %}
+{% if students %}
+<input id="myInput" type="text" placeholder="Search..">
+    <table id="students" class="table table-stiped">
+        <thead>
+            <tr>
+                <th>Student Name</th>
+                <th>Actions</th>
+                
+                <th><a href="/student/new" class="btn btn-success">Add</a></th>
+                    
+            </tr>
+        </thead>
+        <tbody id="mytable">
+            {% for student in students %}
+                <tr>
+                    <td>{{student.FName}}</td>
+                    <td><a href="/student/{{student.id}}" class="btn btn-dark">Show</a>
+                    <a href="#" class="btn btn-danger delete-student" data-id="{{ student.id }}">Delete</a>
+                    <a href="/student/edit/{{student.id}}" class="btn btn-light edit-student" data-id="{{ student.id }}">Edit</a></td>
+                    
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No Students</p>
+    <th><a href="/student/new" class="btn btn-success">Add</a></th>
+{% endif %}
+{% endblock %}
+
+
+

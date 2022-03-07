@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+{% block head %}
+{% block title %} SymfOBS Students {% endblock %}
+{% block javascripts %}
+<script>
+    var $ = jQuery.noConflict();
+    $(document).ready(function(){
+    $(".btn.btn-danger.delete-course").click(function(){
+        var id = $(this).attr('data-id');
+        fetch(`/course/delete/${id}`,
+        {method: `DELETE`}).then(res => window.location.reload());
+    });
+
+
+    $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#mytable tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+  
+
+  });
+
+</script>
+{% endblock %}
+{% endblock %}
+            
+{% block body %}
+{% if courses %}
+<input id="myInput" type="text" placeholder="Search..">
+    <table id="courses" class="table table-stiped">
+        <thead>
+            <tr>
+                <th>Course Name</th>
+                <th>Actions</th>
+                <th><a href="/course/new" class="btn btn-success">Add</a></th>
+                    
+            </tr>
+        </thead>
+        <tbody id="mytable">
+            {% for course in courses %}
+                <tr>
+                    <td>{{course.name}}</td>
+                    <td><a href="/course/{{course.id}}" class="btn btn-dark">Show</a>
+                    <a href="#" class="btn btn-danger delete-course" data-id="{{ course.id }}">Delete</a>
+                    <a href="/course/edit/{{course.id}}" class="btn btn-light edit-course" data-id="{{ course.id }}">Edit</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No Courses</p>
+    <th><a href="/course/new" class="btn btn-success">Add</a></th>
+{% endif %}
+{% endblock %}
+
+
+

@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {{course.name}} {% endblock %}
+
+{% block body %}
+<p>Created in {{course.getDateCreated}}</p>
+{%if course.getDateModified != "0"%}
+<p>Modified in {{course.getDateModified()}}</p>
+{%endif%}
+<h1>{{course.name}}</h1>
+<h2>Description: {{course.description}}</h2>
+<br>
+<a href="/courses">Go Back</a>
+{% endblock %}
